@@ -10,26 +10,26 @@
       unarchive:
         src: nexus-3.35.0-02-unix.tar.gz
         dest: /opt
-    - name: Delete
+    - name: Delete old nexus
       shell: rm -rf /opt/nexus
-    - name: Rename
+    - name: Rename directory
       shell: mv -f /opt/nexus-3.35.0-02 /opt/nexus
-    - name: change owner
+    - name: Change owner nexus directory
       shell: find /opt/nexus -exec chown ec2-user:ec2-user {} \;
-    - name: change owner sonatype-work
+    - name: Change owner sonatype-work directory
       shell: find /opt/sonatype-work -exec chown ec2-user:ec2-user {} \;
-    - name : service
+    - name : Copy nexus service
       copy:
         src: nexus.service
         dest: /etc/systemd/system
-    - name: systemctl daemon-reload
+    - name: Reload daemon
       systemd:
         daemon_reload: yes
-    - name: nexus start
+    - name: Start nexus service
       systemd:
         name: nexus
         state: started
-    - name: nexus enabled
+    - name: Enable nexus service
       systemd:
         name: nexus
         enabled: yes

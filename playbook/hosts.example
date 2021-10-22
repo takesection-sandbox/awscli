@@ -1,0 +1,5 @@
+all:
+  children:
+    nexus:
+      hosts:
+        {AMAZON_LINUX_2_ADDRESS}:

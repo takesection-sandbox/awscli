@@ -13,11 +13,11 @@ cd ..
 # Usage
 
 ```
-docker container create --name helper -v awscredentials:/root busybox
+docker container create --name helper -v aws:/root busybox
 docker cp ~/.aws/credentials helper:/root/
 docker rm helper
 ```
 
 ```
-docker run -it --rm -v awscredentials:/root/.aws awscli ec2 describe-instances
+docker run -it --rm -v aws:/root/.aws awscli ec2 describe-instances
 ```
