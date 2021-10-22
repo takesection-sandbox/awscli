@@ -1,0 +1,35 @@
+---
+- hosts: nexus
+  vars:
+    ansible_become: yes
+    ansible_become_method: sudo
+  tasks:
+    - name: Install Java
+      shell: amazon-linux-extras install -y corretto8
+    - name: Install Nexus OSS
+      unarchive:
+        src: nexus-3.35.0-02-unix.tar.gz
+        dest: /opt
+    - name: Delete
+      shell: rm -rf /opt/nexus
+    - name: Rename
+      shell: mv -f /opt/nexus-3.35.0-02 /opt/nexus
+    - name: change owner
+      shell: find /opt/nexus -exec chown ec2-user:ec2-user {} \;
+    - name: change owner sonatype-work
+      shell: find /opt/sonatype-work -exec chown ec2-user:ec2-user {} \;
+    - name : service
+      copy:
+        src: nexus.service
+        dest: /etc/systemd/system
+    - name: systemctl daemon-reload
+      systemd:
+        daemon_reload: yes
+    - name: nexus start
+      systemd:
+        name: nexus
+        state: started
+    - name: nexus enabled
+      systemd:
+        name: nexus
+        enabled: yes
